@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CS3211 Project 1: Image Processing with GPU.js</title>
+    <link rel="stylesheet" href="css/vendor/bulma.min.css">
+    <link rel="stylesheet" href="css/vendor/bulma-slider.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <section class="hero is-small is-dark is-bold">
+        <div class="hero-body container">
+            <h1 class="title">
+                CS3211 Project 1: Image Processing with GPU.js
+            </h1>
+            <h2 class="subtitle">
+                Submitted by Irvin Lim (A0139812A)
+            </h2>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="tabs nav-wrapper is-centered">
+            <ul>
+                <li class="is-active">
+                    <a href="filters.html">Filter Playground</a>
+                </li>
+                <li>
+                    <a href="qr.html">QR Code Detection</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="columns">
+            <div class="column is-one-third-tablet is-one-quarter-fullhd">
+                <nav class="panel">
+                    <p class="panel-heading">Control Panel</p>
+
+                    <div class="panel-block">
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Status</h5>
+                                </div>
+                                <div class="column is-one-third">
+                                    <input class="button is-fullwidth is-success" type="button" value="Start" onclick="toggleStatus(this);" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Operating Mode</h5>
+                                </div>
+                                <div class="column is-one-third">
+                                    <input class="button is-fullwidth is-info" type="button" value="GPU" onclick="toggleMode(this);" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Camera Flipped</h5>
+                                </div>
+                                <div class="column is-one-third">
+                                    <input class="button is-fullwidth" type="button" value="No" onclick="toggleCameraFlipped(this);" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <nav class="panel sortable">
+                    <p class="panel-heading">Video Filters</p>
+
+                    <div class="panel-block">
+                        <span class="handle panel-icon">
+                            <img src="img/bars.svg" alt="Reorder">
+                        </span>
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Gaussian Blur (5x5)</h5>
+                                </div>
+                                <div class="column col-toggle">
+                                    <input class="control-filter-toggle button" type="button" value="Off" data-filter-name="gaussianFilter">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="slider">Sigma</label>
+                                <input class="control-filter-slider slider is-fullwidth" step="0.05" min="0.05" max="5" value="2" type="range" data-filter-name="gaussianFilter"
+                                    data-param-name="sigma">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <span class="handle panel-icon">
+                            <img src="img/bars.svg" alt="Reorder">
+                        </span>
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Edge Detection (Sobel)</h5>
+                                </div>
+                                <div class="column col-toggle">
+                                    <input class="control-filter-toggle button" type="button" value="Off" data-filter-name="edgeDetectionFilter">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <span class="handle panel-icon">
+                            <img src="img/bars.svg" alt="Reorder">
+                        </span>
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Thresholding</h5>
+                                </div>
+                                <div class="column col-toggle">
+                                    <input class="control-filter-toggle button" type="button" value="Off" data-filter-name="thresholdingFilter">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="slider">Threshold</label>
+                                <input class="control-filter-slider slider is-fullwidth" step="0.01" min="0" max="1" value="0.5" type="range" data-filter-name="thresholdingFilter"
+                                    data-param-name="threshold">
+                            </div>
+                            <div class="field">
+                                <label for="slider">Threshold Mode</label>
+                                <input class="control-filter-slider slider is-fullwidth" step="1" min="0" max="4" value="0" type="range" data-filter-name="thresholdingFilter"
+                                    data-param-name="mode">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <span class="handle panel-icon">
+                            <img src="img/bars.svg" alt="Reorder">
+                        </span>
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Embossed Filter</h5>
+                                </div>
+                                <div class="column col-toggle">
+                                    <input class="control-filter-toggle button" type="button" value="Off" data-filter-name="embossedFilter">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-block">
+                        <span class="handle panel-icon">
+                            <img src="img/bars.svg" alt="Reorder">
+                        </span>
+                        <div class="control">
+                            <div class="columns is-mobile">
+                                <div class="column col-title">
+                                    <h5 class="title is-6">Light Tunnel Effect</h5>
+                                </div>
+                                <div class="column col-toggle">
+                                    <input class="control-filter-toggle button" type="button" value="Off" data-filter-name="lightTunnelFilter">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="slider">Radius</label>
+                                <input class="control-filter-slider slider is-fullwidth" step="1" min="50" max="200" value="100" type="range" data-filter-name="lightTunnelFilter"
+                                    data-param-name="radius">
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="column">
+                <div class="row">
+                    <div class="notification">
+                        <button class="delete" onclick="hideNotification(this);"></button>
+                        <p>Click "Start" to start streaming from your device's camera.</p>
+                        <p>You can toggle image filters on the right, as well as drag to reorder them.</p>
+                    </div>
+
+                    <div class="row fps-wrapper">
+                        <div class="fps-tags tags has-addons">
+                            <span class="tag is-dark">FPS</span>
+                            <span id="fps" class="tag is-success">0</span>
+                        </div>
+                    </div>
+
+                    <div class="row canvas-wrapper">
+                        <video hidden id="video" width="800" height="600" playsinline autoplay muted></video>
+                        <canvas hidden id="videoCanvas" width="800" height="600"></canvas>
+                    </div>
+                </div>
+            </div>
+    </main>
+
+    <script src="js/vendor/html.sortable.min.js?nocache"></script>
+    <script src="js/vendor/bulma-slider.js?nocache"></script>
+    <script src="js/vendor/gpu.min.js?nocache"></script>
+    <script src="js/vendor/decls.js?nocache"></script>
+    <script src="js/common/util.js?nocache"></script>
+    <script src="js/common/camera.js?nocache"></script>
+    <script src="js/common/state.js?nocache"></script>
+    <script src="js/common/ui.js?nocache"></script>
+    <script src="js/filters/main.js?nocache"></script>
+    <script src="js/filters/kernels.js?nocache"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+*.wmv
+*.psd
+dt.jpg
+kim.jpg
+drop.jpg
+owl.jpg
+21.jpg
+nz.png
+circles.py
+linet.py
+avgcolorinpoly.py
+readkey.py
+mouse.py
+__pycache__/
+.idea/
+result/
